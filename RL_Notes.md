@@ -19,16 +19,16 @@ $\gamma=\left[0,1\right]$ is a discount rate.
 $$
 \begin{align*}
 v_\pi\left(s\right) &\doteq \mathbf{E}_\pi\left[G_t{\vert}S_t=s\right] \\
-    &= \mathbf{E}_\pi\left[R_{t+1} + \gamma G_{t+1} {\vert} S_t=s\right] \\
-    &= \sum_a \pi\left(a{\vert}s\right) \sum_{s'} \sum_{r'} p\left(s',r{\vert}s,a\right) \left[r+\gamma\mathbf{E}_\pi\left[G_{t+1}{\vert}S_{t+1}=s'\right]\right]\\
-    &= \sum_a \pi\left(a{\vert}s\right) \sum_{s',r} p\left(s',r{\vert}s,a\right) \left[r+{\gamma}v_\pi\left(s'\right)\right]\\
+    &= \mathbf{E}_\pi\left[R_{t+1}+\gamma G_{t+1}{\vert}S_t=s\right] \\
+    &= \sum_a \pi\left(a{\vert}s\right) \sum_{s'} \sum_{r'} p\left(s',r{\vert}s,a\right) \left[r+\gamma\mathbf{E}_\pi\left[G_{t+1}{\vert}S_{t+1}=s'\right]\right] \\
+    &= \sum_a \pi\left(a{\vert}s\right) \sum_{s',r} p\left(s',r{\vert}s,a\right) \left[r+{\gamma}v_\pi\left(s'\right)\right] \\
 \end{align*}
 $$
 
 The last equation is called as Bellman equation for $v_\pi$. $\pi(a|s)$ is the probability that
 $A_t=a$ if $S_t=s$.
 
-$$p\left(s',r{\vert}s,a\right) \doteq \Pr\{S_t=s',R_t=r{\vert}S_{t-1}=s,A_{t-1}=a\}$$
+$$p\left(s',r{\vert}s,a\right) \doteq \Pr\left\{S_t=s',R_t=r{\vert}S_{t-1}=s,A_{t-1}=a\right\}$$
 
 # Action Value Function for Policy $\pi$
 
