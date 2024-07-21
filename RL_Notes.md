@@ -19,7 +19,7 @@ $\gamma=\left[0,1\right]$ is a discount rate.
 $$
 \begin{align*}
 v_\pi\left(s\right) &\doteq \mathbf{E}_\pi\left[G_t{\vert}S_t=s\right] \\
-    &= \mathbf{E}_\pi\left[R_{t+1}+\gamma G_{t+1}{\vert}S_t=s\right] \\
+    &= \mathbf{E}_\pi\left[R_{t+1}+{\gamma}G_{t+1}{\vert}S_t=s\right] \\
     &= \sum_a \pi\left(a{\vert}s\right) \sum_{s'} \sum_{r'} p\left(s',r{\vert}s,a\right) \left[r+\gamma\mathbf{E}_\pi\left[G_{t+1}{\vert}S_{t+1}=s'\right]\right] \\
     &= \sum_a \pi\left(a{\vert}s\right) \sum_{s',r} p\left(s',r{\vert}s,a\right) \left[r+{\gamma}v_\pi\left(s'\right)\right] \\
 \end{align*}
