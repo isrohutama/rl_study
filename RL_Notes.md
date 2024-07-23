@@ -20,7 +20,7 @@ $$
 \begin{align*}
 v_\pi\left(s\right) &\doteq \mathbf{E}_\pi\left[G_t{\vert}S_t=s\right] \\
     &= \mathbf{E}_\pi\left[R_{t+1}+{\gamma}G_{t+1}{\vert}S_t=s\right] \\
-    &= \sum_a \pi\left(a{\vert}s\right) \sum_{s'} \sum_{r'} p\left(s',r{\vert}s,a\right) \left[r+\gamma\mathbf{E}_\pi\left[G_{t+1}{\vert}S_{t+1}=s'\right]\right] \\
+    &= \sum_a \pi\left(a{\vert}s\right) \sum_{s'} \sum_{r} p\left(s',r{\vert}s,a\right) \left[r+\gamma\mathbf{E}_\pi\left[G_{t+1}{\vert}S_{t+1}=s'\right]\right] \\
     &= \sum_a \pi\left(a{\vert}s\right) \sum_{s',r} p\left(s',r{\vert}s,a\right) \left[r+{\gamma}v_\pi\left(s'\right)\right] \\
 \end{align*}
 $$
@@ -30,12 +30,31 @@ $A_t=a$ if $S_t=s$.
 
 $$p\left(s',r{\vert}s,a\right) \doteq \Pr\left\{S_t=s',R_t=r{\vert}S_{t-1}=s,A_{t-1}=a\right\}$$
 
+
+$$
+\begin{align*}
+v_\pi\left(s\right) &\doteq \mathbf{E}_\pi\left[G_t{\vert}S_t=s\right] \\
+    &= \mathbf{E}_\pi\left[R_{t+1}+{\gamma}G_{t+1}{\vert}S_t=s\right] \\
+    &= \mathbf{E}_\pi\left[R_{t+1}+{\gamma}\mathbf{E}_\pi\left[G_{t+1}{\vert}S_{t+1}\right]{\vert}S_t=s\right] & \text{by the law of total expectation} \\
+    &= \mathbf{E}_\pi\left[R_{t+1}+{\gamma}v_\pi\left(S_{t+1}\right){\vert}S_t=s\right] \\
+\end{align*}
+$$
+
 # Action Value Function for Policy $\pi$
 
 $$
 \begin{align*}
 q_\pi\left(s,a\right) &\doteq \mathbf{E}_\pi\left[G_t{\vert}S_t=s, A_t=a\right] \\
     &= \sum_{s',r} p\left(s',r{\vert}s,a\right) \left[r+{\gamma}v_\pi\left(s'\right)\right]\\
+\end{align*}
+$$
+
+$$
+\begin{align*}
+q_\pi\left(s,a\right) &\doteq \mathbf{E}_\pi\left[G_t{\vert}S_t=s, A_t=a\right] \\
+    &= \mathbf{E}_\pi\left[R_{t+1}+{\gamma}G_{t+1}{\vert}S_t=s, A_t=a\right] \\
+    &= \mathbf{E}_\pi\left[R_{t+1}+{\gamma}\mathbf{E}_\pi\left[G_{t+1}{\vert}S_{t+1},A_{t+1}\right]{\vert}S_t=s, A_t=a\right] & \text{by the law of total expectation} \\
+    &= \mathbf{E}_\pi\left[R_{t+1}+{\gamma}q_\pi\left(S_{t+1},A_{t+1}\right){\vert}S_t=s, A_t=a\right] \\
 \end{align*}
 $$
 
@@ -191,7 +210,7 @@ Source: Reinforcement Learning: An Introduction, Richard S. Sutton and Andrew G.
             - $G \leftarrow \gamma G + R_{t+1}$
             - Unless the pair $S_t, A_t$ appears in $S_0, A_0, S_1, A_1, \dots, S_{t-1}, A_{t-1}$:
                 - Append $G$ to $Returns\left(S_t, A_t\right)$
-                - $Q\left(S_t, A_t\right) \leftarrow \text{average}\left(Returns\left(S_t\right)\right)$
+                - $Q\left(S_t, A_t\right) \leftarrow \text{average}\left(Returns\left(S_t,A_t\right)\right)$
                 - $\pi\left(S_t\right) \leftarrow \argmax_a Q\left(S_t,a\right)$
     </details>
 - On-Policy First-Visit Monte Carlo Control (for $\varepsilon$-soft policy)
@@ -210,7 +229,7 @@ Source: Reinforcement Learning: An Introduction, Richard S. Sutton and Andrew G.
             - $G \leftarrow \gamma G + R_{t+1}$
             - Unless the pair $S_t, A_t$ appears in $S_0, A_0, S_1, A_1, \dots, S_{t-1}, A_{t-1}$:
                 - Append $G$ to $Returns\left(S_t, A_t\right)$
-                - $Q\left(S_t, A_t\right) \leftarrow \text{average}\left(Returns\left(S_t\right)\right)$
+                - $Q\left(S_t, A_t\right) \leftarrow \text{average}\left(Returns\left(S_t,A_t\right)\right)$
                 - $A^* \leftarrow \argmax_a Q\left(S_t,a\right)$
                 - For all $a \in \mathbb{A}\left(S_t\right)$:<br>
                     $$
@@ -262,15 +281,80 @@ Source: Reinforcement Learning: An Introduction, Richard S. Sutton and Andrew G.
             - $W \leftarrow W \frac{1}{b\left(A_t|S_t\right)}$
     </details>
 
-# Sarsa: On-Policy TD Control
-$$Q\left(S,A\right) \leftarrow Q\left(S,A\right) + \alpha \left[R+{\gamma}Q\left(S',A'\right)-Q\left(S,A\right)\right]$$
+# Temporal Difference (TD) Learning
 
-$A$ and $A'$ are selected using the same policy derived from Q (e.g. $\epsilon$-greedy)
+Source: Reinforcement Learning: An Introduction, Richard S. Sutton and Andrew G. Barto
+- TD Prediction
+    - $V\left(S_t\right) \leftarrow V\left(S_t\right) + \alpha \left[R_{t+1}+{\gamma}V\left(S_{t+1}\right)-V\left(S_t\right)\right]$
+    - Input: a policy $\pi$
+    <details>
+    <summary>pseudocode</summary>
 
-# Q-Learning: Off-Policy TD Control
-$$Q\left(S,A\right) \leftarrow Q\left(S,A\right) + \alpha \left[R+{\gamma}\max_aQ\left(S',a\right)-Q\left(S,A\right)\right]$$
+    - Algorithm parameter: step size $\alpha \in \left(0,1\right]$
+    - Initialize $V\left(s\right)$, for all $s \in \mathbb{S}^+$, arbitrarily except that $V\left(terminal\right)=0$
+    - Loop for each episode:
+        - Initialize $S$
+        - Loop for each step of episode:
+            - $A \leftarrow$ action given by $\pi$ for $S$
+            - Take action $A$, observe $R$, $S'$
+            - $V\left(S\right) \leftarrow V\left(S\right) + \alpha \left[R+{\gamma}V\left(S'\right)-V\left(S\right)\right]$
+            - $S \leftarrow S'$
+            - If $S$ is terminal, then exit the loop
+    </details>
+- Sarsa: On-Policy TD Control
+    - $Q\left(S_t,A_t\right) \leftarrow Q\left(S_t,A_t\right) + \alpha \left[R_{t+1}+{\gamma}Q\left(S_{t+1},A_{t+1}\right)-Q\left(S_t,A_t\right)\right]$
+    - $A_t$ and $A_{t+1}$ are selected using the same policy derived from Q (e.g. $\epsilon$-greedy)
+    <details>
+    <summary>pseudocode</summary>
 
-$A$ is selected using policy derived from Q (e.g. $\epsilon$-greedy)
+    - Algorithm parameters: step size $\alpha \in \left(0,1\right]$, small $\varepsilon > 0$
+    - Initialize $Q\left(s,a\right)$, for all $s \in \mathbb{S}^+$, $a \in \mathbb{A}\left(s\right)$, arbitrarily except that $Q\left(terminal, \cdot\right)=0$
+    - Loop for each episode:
+        - Initialize $S$
+        - Choose $A$ from $S$ using policy derived from $Q$ (e.g. $\varepsilon$-greedy)
+        - Loop for each step of episode:
+            - Take action $A$, observe $R$, $S'$
+            - Choose $A'$ from $S'$ using policy derived from $Q$ (e.g. $\varepsilon$-greedy)
+            - $Q\left(S,A\right) \leftarrow Q\left(S,A\right) + \alpha \left[R+{\gamma}Q\left(S',A'\right)-Q\left(S,A\right)\right]$
+            - $S \leftarrow S'$, $A \leftarrow A'$
+            - If $S$ is terminal, then exit the loop
+    </details>
+- Q-Learning: Off-Policy TD Control
+    - $Q\left(S_t,A_t\right) \leftarrow Q\left(S_t,A_t\right) + \alpha \left[R_{t+1}+{\gamma}\max_aQ\left(S_{t+1},a\right)-Q\left(S_t,A_t\right)\right]$
+    - $A$ is selected using policy derived from Q (e.g. $\epsilon$-greedy)
+    <details>
+    <summary>pseudocode</summary>
+
+    - Algorithm parameters: step size $\alpha \in \left(0,1\right]$, small $\varepsilon > 0$
+    - Initialize $Q\left(s,a\right)$, for all $s \in \mathbb{S}^+$, $a \in \mathbb{A}\left(s\right)$, arbitrarily except that $Q\left(terminal, \cdot\right)=0$
+    - Loop for each episode:
+        - Initialize $S$
+        - Loop for each step of episode:
+            - Choose $A$ from $S$ using policy derived from $Q$ (e.g. $\varepsilon$-greedy)
+            - Take action $A$, observe $R$, $S'$
+            - $Q\left(S,A\right) \leftarrow Q\left(S,A\right) + \alpha \left[R+{\gamma}\max_aQ\left(S',a\right)-Q\left(S,A\right)\right]$
+            - $S \leftarrow S'$
+            - If $S$ is terminal, then exit the loop
+    </details>
+- Double Q-Learning
+    - To adress maximization bias.
+    <details>
+    <summary>pseudocode</summary>
+
+    - Algorithm parameters: step size $\alpha \in \left(0,1\right]$, small $\varepsilon > 0$
+    - Initialize $Q_1\left(s,a\right)$ and $Q_2\left(s,a\right)$, for all $s \in \mathbb{S}^+$, $a \in \mathbb{A}\left(s\right)$, such that $Q\left(terminal, \cdot\right)=0$
+    - Loop for each episode:
+        - Initialize $S$
+        - Loop for each step of episode:
+            - Choose $A$ from $S$ using the policy $\varepsilon$-greedy in $Q_1+Q_2$
+            - Take action $A$, observe $R$, $S'$
+            - With 0.5 probability:
+                - $Q_1\left(S,A\right) \leftarrow Q_1\left(S,A\right) + \alpha \left[R+{\gamma}Q_2\left(S',\max_aQ_1\left(S',a\right)\right)-Q_1\left(S,A\right)\right]$
+            - else:
+                - $Q_2\left(S,A\right) \leftarrow Q_2\left(S,A\right) + \alpha \left[R+{\gamma}Q_1\left(S',\max_aQ_2\left(S',a\right)\right)-Q_2\left(S,A\right)\right]$
+            - $S \leftarrow S'$
+            - If $S$ is terminal, then exit the loop
+    </details>
 
 # DQN (Deep Q Networks)
 Paper: [Playing Atari with Deep Reinforcement Learning](https://arxiv.org/pdf/1312.5602.pdf)
