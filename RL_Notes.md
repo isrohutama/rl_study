@@ -359,7 +359,10 @@ Source: Reinforcement Learning: An Introduction, Richard S. Sutton and Andrew G.
 # DQN (Deep Q Networks)
 Paper: [Playing Atari with Deep Reinforcement Learning](https://arxiv.org/pdf/1312.5602.pdf)
 
-$$L = \left[R_{t+1}+\gamma\max_{a'}{Q\left(S_{t+1},a';\theta_t\right)}-{Q\left(S_{t},A_t;\theta_t\right)}\right]^2$$
+$$L = \left[R_{t+1}+\gamma\max_{a'}{Q\left(S_{t+1},a';\theta^-_t\right)}-{Q\left(S_{t},A_t;\theta_t\right)}\right]^2$$
+
+$\theta^-_t$ is delayed version of $\theta_t$ or alternatively
+$$\theta^-_t=(1-\tau)\theta^-_{t-1}+\tau\theta_{t-1}$$
 
 # DDQN (Double Deep Q Networks)
 Paper: [Deep Reinforcement Learning with Double Q-learning](https://arxiv.org/pdf/1509.06461.pdf)
