@@ -373,7 +373,7 @@ $\theta^-_t$ is delayed version of $\theta_t$ or alternatively
 $$\theta^-_t=(1-\tau)\theta^-_{t-1}+\tau\theta_{t-1}$$
 
 # The Policy Gradient
-[source](https://lilianweng.github.io/posts/2018-04-08-policy-gradient)
+[Source](https://lilianweng.github.io/posts/2018-04-08-policy-gradient)
 
 $$
 \begin{align*}
@@ -430,7 +430,7 @@ $$
 $$
 where $\mathbf{E}_\pi$ refers to $\mathbf{E}_{s{\sim}d_\pi,a{\sim}\pi_\theta}$ when both state and action distributions follow the policy $\pi_\theta$.
 
-## REINFORCE: Monte Carlo Policy Gradient
+# REINFORCE: Monte Carlo Policy Gradient
 $$
 \begin{align*}
 {\nabla_\theta}J\left(\theta\right) &\propto \mathbf{E}_\pi\left[q_\pi\left(S_t,A_t\right){\nabla_\theta}\ln\pi_\theta\left(A_t{\vert}S_t\right)\right] \\
