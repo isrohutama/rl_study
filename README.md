@@ -13,3 +13,5 @@
     Tags: cart pole, DDQN, prioritized experience replay, delayed update, vectorized environments
 - cart_pole_ddqn_prioritized_experience_replay_vector_env_soft_update.ipynb<br>
     Tags: cart pole, DDQN, prioritized experience replay, soft update, vectorized environments
+- cart_pole_ddqn_prioritized_experience_replay_vector_env_nstep.ipynb
+    Tags: cart pole, DDQN, prioritized experience replay, delayed update, vectorized environments, n-steps

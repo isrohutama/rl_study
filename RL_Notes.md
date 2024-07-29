@@ -281,6 +281,8 @@ Source: Reinforcement Learning: An Introduction, Richard S. Sutton and Andrew G.
             - $W \leftarrow W \frac{1}{b\left(A_t|S_t\right)}$
     </details>
 
+Note that off-policy learning methods require important sampling ratio.
+
 # Temporal Difference (TD) Learning
 
 Source: Reinforcement Learning: An Introduction, Richard S. Sutton and Andrew G. Barto
@@ -355,6 +357,8 @@ Source: Reinforcement Learning: An Introduction, Richard S. Sutton and Andrew G.
             - $S \leftarrow S'$
             - If $S$ is terminal, then exit the loop
     </details>
+
+Q-learning, which is one of off-policy learning methods, here doesn't require important sampling ratio because it uses 1-step bootstrapping. If n-step bootstrapping is used, it requires important sampling ratio in the update. [This link](https://stats.stackexchange.com/questions/335396/why-dont-we-use-importance-sampling-for-one-step-q-learning) provides a very good explanation why important sampling ratio is needed. However, some implementations such as [Rainbow DQN](https://arxiv.org/pdf/1710.02298) always set the ratio as 1.
 
 # DQN (Deep Q Networks)
 Paper: [Playing Atari with Deep Reinforcement Learning](https://arxiv.org/pdf/1312.5602.pdf)
