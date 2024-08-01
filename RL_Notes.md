@@ -381,11 +381,11 @@ $$\theta^-_t=(1-\tau)\theta^-_{t-1}+\tau\theta_{t-1}$$
 
 $$
 \begin{align*}
-{\nabla_\theta}V^\pi\left(s\right) &= {\nabla_\theta} \left(\sum_a \pi_\theta\left(a{\vert}s\right) Q^\pi\left(s,a\right)\right) \\
-    &= \sum_a \left({\nabla_\theta}\pi_\theta\left(a{\vert}s\right) Q^\pi\left(s,a\right) + \pi_\theta\left(a{\vert}s\right) {\nabla_\theta}Q^\pi\left(s,a\right)\right) \\
-    &= \sum_a \left({\nabla_\theta}\pi_\theta\left(a{\vert}s\right) Q^\pi\left(s,a\right) + \pi_\theta\left(a{\vert}s\right) {\nabla_\theta} \sum_{s',r} p\left(s',r{\vert}s,a\right)\left(r + V^\pi\left(s'\right) \right)\right) \\
-    &= \sum_a \left({\nabla_\theta}\pi_\theta\left(a{\vert}s\right) Q^\pi\left(s,a\right) + \pi_\theta\left(a{\vert}s\right) \sum_{s',r} p\left(s',r{\vert}s,a\right) {\nabla_\theta} V^\pi\left(s'\right) \right) &p\left(s',r{\vert}s,a\right),r\text{ are not functions of }\theta \\
-    &= \sum_a \left({\nabla_\theta}\pi_\theta\left(a{\vert}s\right) Q^\pi\left(s,a\right) + \pi_\theta\left(a{\vert}s\right) \sum_{s'} p\left(s'{\vert}s,a\right) {\nabla_\theta} V^\pi\left(s'\right) \right) &p\left(s'{\vert}s,a\right)={\sum_r}p\left(s',r{\vert}s,a\right) \\
+{\nabla_\theta}v^\pi\left(s\right) &= {\nabla_\theta} \left(\sum_a \pi_\theta\left(a{\vert}s\right) q^\pi\left(s,a\right)\right) \\
+    &= \sum_a \left({\nabla_\theta}\pi_\theta\left(a{\vert}s\right) q^\pi\left(s,a\right) + \pi_\theta\left(a{\vert}s\right) {\nabla_\theta}q^\pi\left(s,a\right)\right) \\
+    &= \sum_a \left({\nabla_\theta}\pi_\theta\left(a{\vert}s\right) q^\pi\left(s,a\right) + \pi_\theta\left(a{\vert}s\right) {\nabla_\theta} \sum_{s',r} p\left(s',r{\vert}s,a\right)\left(r + v^\pi\left(s'\right) \right)\right) \\
+    &= \sum_a \left({\nabla_\theta}\pi_\theta\left(a{\vert}s\right) q^\pi\left(s,a\right) + \pi_\theta\left(a{\vert}s\right) \sum_{s',r} p\left(s',r{\vert}s,a\right) {\nabla_\theta} v^\pi\left(s'\right) \right) &p\left(s',r{\vert}s,a\right),r\text{ are not functions of }\theta \\
+    &= \sum_a \left({\nabla_\theta}\pi_\theta\left(a{\vert}s\right) q^\pi\left(s,a\right) + \pi_\theta\left(a{\vert}s\right) \sum_{s'} p\left(s'{\vert}s,a\right) {\nabla_\theta} v^\pi\left(s'\right) \right) &p\left(s'{\vert}s,a\right)={\sum_r}p\left(s',r{\vert}s,a\right) \\
 \end{align*}
 $$
 
@@ -394,16 +394,16 @@ Let's define the probability of transitioning from state $s$ to state $x$ with p
 - When $k=1$: $\rho^\pi\left(s{\rightarrow}s',1\right) = \sum_{a} p\left(s'{\vert}s,a\right) \pi_\theta\left(a{\vert}s\right)$
 - $\rho^\pi\left(s{\rightarrow}x,k+1\right) = \sum_{s'} \rho^\pi\left(s{\rightarrow}s',k\right) \rho^\pi\left(s'{\rightarrow}x,1\right)$
 
-Let's define $\phi\left(s\right) = \sum_a {\nabla_\theta}\pi_\theta\left(a{\vert}s\right) Q^\pi\left(s,a\right)$ to simplify the maths.
+Let's define $\phi\left(s\right) = \sum_a {\nabla_\theta}\pi_\theta\left(a{\vert}s\right) q^\pi\left(s,a\right)$ to simplify the maths.
 
 $$
 \begin{align*}
-{\nabla_\theta}V^\pi\left(s\right) &= \phi\left(s\right) + \sum_a \pi_\theta\left(a{\vert}s\right) \sum_{s'} p\left(s'{\vert}s,a\right) {\nabla_\theta} V^\pi\left(s'\right) \\
-    &= \phi\left(s\right) + \sum_{s'} \sum_a \pi_\theta\left(a{\vert}s\right) p\left(s'{\vert}s,a\right) {\nabla_\theta} V^\pi\left(s'\right) \\
-    &= \phi\left(s\right) + \sum_{s'} \rho^\pi\left(s{\rightarrow}s',1\right) {\nabla_\theta} V^\pi\left(s'\right) \\
-    &= \phi\left(s\right) + \sum_{s'} \rho^\pi\left(s{\rightarrow}s',1\right) \left[\phi\left(s'\right) + \sum_{s''} \rho^\pi\left(s'{\rightarrow}s'',1\right) {\nabla_\theta} V^\pi\left(s''\right)\right] \\
-    &= \phi\left(s\right) + \sum_{s'} \rho^\pi\left(s{\rightarrow}s',1\right) \phi\left(s'\right) + \sum_{s''} \rho^\pi\left(s{\rightarrow}s'',2\right) {\nabla_\theta} V^\pi\left(s''\right) \\
-    &= \phi\left(s\right) + \sum_{s'} \rho^\pi\left(s{\rightarrow}s',1\right) \phi\left(s'\right) + \sum_{s''} \rho^\pi\left(s{\rightarrow}s'',2\right) \phi\left(s''\right) + \sum_{s'''} \rho^\pi\left(s{\rightarrow}s''',3\right) {\nabla_\theta} V^\pi\left(s'''\right) \\
+{\nabla_\theta}v^\pi\left(s\right) &= \phi\left(s\right) + \sum_a \pi_\theta\left(a{\vert}s\right) \sum_{s'} p\left(s'{\vert}s,a\right) {\nabla_\theta} v^\pi\left(s'\right) \\
+    &= \phi\left(s\right) + \sum_{s'} \sum_a \pi_\theta\left(a{\vert}s\right) p\left(s'{\vert}s,a\right) {\nabla_\theta} v^\pi\left(s'\right) \\
+    &= \phi\left(s\right) + \sum_{s'} \rho^\pi\left(s{\rightarrow}s',1\right) {\nabla_\theta} v^\pi\left(s'\right) \\
+    &= \phi\left(s\right) + \sum_{s'} \rho^\pi\left(s{\rightarrow}s',1\right) \left[\phi\left(s'\right) + \sum_{s''} \rho^\pi\left(s'{\rightarrow}s'',1\right) {\nabla_\theta} v^\pi\left(s''\right)\right] \\
+    &= \phi\left(s\right) + \sum_{s'} \rho^\pi\left(s{\rightarrow}s',1\right) \phi\left(s'\right) + \sum_{s''} \rho^\pi\left(s{\rightarrow}s'',2\right) {\nabla_\theta} v^\pi\left(s''\right) \\
+    &= \phi\left(s\right) + \sum_{s'} \rho^\pi\left(s{\rightarrow}s',1\right) \phi\left(s'\right) + \sum_{s''} \rho^\pi\left(s{\rightarrow}s'',2\right) \phi\left(s''\right) + \sum_{s'''} \rho^\pi\left(s{\rightarrow}s''',3\right) {\nabla_\theta} v^\pi\left(s'''\right) \\
     &= \cdots \\
     &= \sum_{x\epsilon\mathbf{S}} \sum_{k=0}^\infty \rho^\pi\left(s{\rightarrow}x,k\right) \phi\left(x\right)
 \end{align*}
@@ -415,24 +415,17 @@ where $V_\pi$ is the true value function for policy $\pi_\theta$ and assuming th
 
 $$
 \begin{align*}
-{\nabla_\theta}J\left(\theta\right) &= {\nabla_\theta}V^\pi\left(s_0\right) \\
+{\nabla_\theta}J\left(\theta\right) &= {\nabla_\theta}v^\pi\left(s_0\right) \\
     &= \sum_{s} \sum_{k=0}^\infty \rho^\pi\left(s_0{\rightarrow}s,k\right) \phi\left(s\right) \\
     &= \sum_{s} \eta\left(s\right) \phi\left(s\right) &\eta\left(s\right) = \sum_{k=0}^\infty \rho^\pi\left(s_0{\rightarrow}s,k\right)\\
     &= \left(\sum_{s} \eta\left(s\right)\right) \sum_{s}  \frac{\eta\left(s\right)}{\sum_{s} \eta\left(s\right)} \phi\left(s\right) \\
     &\propto \sum_{s}  \frac{\eta\left(s\right)}{\sum_{s} \eta\left(s\right)} \phi\left(s\right) \\
-    &= \sum_{s} d^\pi\left(s\right) \sum_a {\nabla_\theta}\pi_\theta\left(a{\vert}s\right) Q^\pi\left(s,a\right) & d^\pi\left(s\right) = \frac{\eta\left(s\right)}{\sum_{s} \eta\left(s\right)} \\
+    &= \sum_{s} d^\pi\left(s\right) \sum_a {\nabla_\theta}\pi_\theta\left(a{\vert}s\right) q^\pi\left(s,a\right) & d^\pi\left(s\right) = \frac{\eta\left(s\right)}{\sum_{s} \eta\left(s\right)} \\
+    &= \sum_{s} d^\pi\left(s\right) \sum_a \pi_\theta\left(a{\vert}s\right)  q^\pi\left(s,a\right) \frac{{\nabla_\theta}\pi_\theta\left(a{\vert}s\right)}{\pi_\theta\left(a{\vert}s\right)} \\
+    &= \mathbf{E}_\pi\left[q^\pi\left(S_t,A_t\right){\nabla_\theta}\ln\pi_\theta\left(A_t{\vert}S_t\right)\right] &{\nabla}{\ln{x}}=\frac{{\nabla}x}{x}\\
 \end{align*}
 $$
-
-For the continuing case, the gradient can be written further as:
-$$
-\begin{align*}
-{\nabla_\theta}J\left(\theta\right) &\propto \sum_{s} d^\pi\left(s\right) \sum_a Q^\pi\left(s,a\right) {\nabla_\theta}\pi_\theta\left(a{\vert}s\right) \\
-    &= \sum_{s} d^\pi\left(s\right) \sum_a \pi_\theta\left(a{\vert}s\right)  Q^\pi\left(s,a\right) \frac{{\nabla_\theta}\pi_\theta\left(a{\vert}s\right)}{\pi_\theta\left(a{\vert}s\right)} \\
-    &= \mathbf{E}_\pi\left[Q^\pi\left(s,a\right){\nabla_\theta}\ln\pi_\theta\left(a{\vert}s\right)\right] &{\nabla}{\ln{x}}=\frac{{\nabla}x}{x}\\
-\end{align*}
-$$
-where $\mathbf{E}_\pi$ refers to $\mathbf{E}_{s{\sim}d_\pi,a{\sim}\pi_\theta}$ when both state and action distributions follow the policy $\pi_\theta$.
+where $\mathbf{E}_\pi$ refers to $\mathbf{E}_{S_t{\sim}d_\pi,A_t{\sim}\pi_\theta}$ when both state and action distributions follow the policy $\pi_\theta$.
 
 # REINFORCE: Monte Carlo Policy Gradient
 $$
@@ -448,7 +441,7 @@ A negative sign is added to the loss function because we want to maximize $J\lef
 
 # REINFORCE with Baseline
 $$
-{\nabla_\theta}J\left(\theta\right) \propto \sum_{s} d^\pi\left(s\right) \sum_a \left[Q^\pi\left(s,a\right) - \hat{v}_w\left(s\right)\right] {\nabla_\theta}\pi_\theta\left(a{\vert}s\right) 
+{\nabla_\theta}J\left(\theta\right) \propto \sum_{s} d^\pi\left(s\right) \sum_a \left[q^\pi\left(s,a\right) - \hat{v}_w\left(s\right)\right] {\nabla_\theta}\pi_\theta\left(a{\vert}s\right) 
 $$
 
 Note that:
