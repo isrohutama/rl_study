@@ -17,3 +17,7 @@
     Tags: cart pole, DDQN, prioritized experience replay, delayed update, vectorized environments, n-steps
 - cart_pole_categorical_ddqn_prioritized_experience_replay_vector_env_nstep.ipynb<br>
     Tags: cart pole, Categorical DDQN, prioritized experience replay, delayed update, vectorized environments, n-steps
+- cart_pole_a2c_vector_env.ipynb<br>
+    Tags: cart pole, A2C, vectorized environments
+- cart_pole_a2c_ppo_vector_env.ipynb<br>
+    Tags: cart pole, A2C, PPO, vectorized environments
